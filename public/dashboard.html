@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/system_info.css">
+  <link rel="stylesheet" href="./css/audio_info.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100svh;
+      background-color: #000;
+      font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN",
+        "Hiragino Sans", "Noto Sans", Meiryo, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      flex: 1;
+      padding: 10px;
+      /* gap: 10px; */
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    .main-content-outer {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      /* gap: 10px; */
+    }
+
+    .player-container {
+      margin-bottom: 10px;
+    }
+
+    .sidebar{
+      margin-left: 10px;
+    }
+
+    .system-info,
+    .sidebar,
+    .main-content {
+      border-radius: 10px;
+      background-color: #1e1e1e;
+      color: white;
+    }
+
+    .sidebar,
+    .main-content {
+      padding: 150px;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      padding: 10px;
+      /* gap: 10px; */
+    }
+
+    .sidebar-item{
+      
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    .button-area {
+      display: flex;
+      /* gap: 10px; */
+      align-items: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    .inner-button {
+      width: 50px;
+      height: 50px;
+      background-color: #141414;
+      border: none;
+      border-radius: 7px;
+      margin: 0px 5px;
+      padding: 0;
+    }
+
+    .inner-button img {
+      left: 0;
+      top: 0;
+      margin: 0;
+      padding: 5px;
+      width: 100%;
+      height: 100%;
+    }
+
+    .inner-button:disabled {
+      background-color: #363636;
+    }
+
+    .inner-button:active {
+      /* 縮小 */
+      transform: scale(0.9);
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      /* border: 2px solid #000; */
+      border-radius: 10px;
+      background-color: #4e4e4e;
+      padding: 5px;
+      
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    /* .sidebar-item img {
+      width: 50px;
+      height: 50px;
+    } */
+
+    .sidebar-item .text-box {
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 10px;
+      align-items: center;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      padding: 10px;
+      gap: 10px;
+    }
+
+    .main-content .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .main-content .button-group button {
+      width: 50px;
+      height: 50px;
+      background-color: #ccc;
+      border: none;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      background-color: #ccc;
+    }
+
+    .text-box {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .text-area {
+      font-size: larger;
+      color: white;
+      background-color: #4e4e4e;
+      border-color: #4e4e4e;
+      outline: none;
+      resize: none;
+    }
+
+    .image-container {
+      width: 100px;
+      /* 正方形の幅 */
+      height: 100px;
+      /* 正方形の高さ */
+      /* background-color: white; */
+      /* 背景を白に設定 */
+      display: flex;
+      /* 子要素を中央に配置するためにflexを使用 */
+      justify-content: center;
+      /* 横方向に中央配置 */
+      align-items: center;
+      /* 縦方向に中央配置 */
+      user-select: none;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      /* 画像の幅をコンテナに合わせる */
+      max-height: 100%;
+      /* 画像の高さをコンテナに合わせる */
+      object-fit: contain;
+      /* 画像のアスペクト比を維持しながらリサイズ */
+      /* background-color: white; */
+      /* 余白部分の背景を白に設定 */
+    }
+
+
+
+    /* 縦長の場合 */
+    @media (min-aspect-ratio: 1/1) {
+      .container {
+        flex-direction: row;
+      }
+
+      .sidebar {
+        width: 50%;
+        height: 100%;
+      }
+
+      .main-content {
+        width: 100%;
+        height: 100%;
+      }
+
+    }
+
+    /* 横長の場合 */
+    @media (max-aspect-ratio: 1/1) {
+      .container {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: 50%;
+      }
+
+      .main-content {
+        width: 100%;
+        height: 50%;
+      }
+      
+      .system-info {
+        margin-bottom: 10px;
+      }
+
+      .sidebar {
+        height: 55%;
+        margin: 0;
+      }
+    }
+  </style>
+  <link rel="icon" href="./img/icon.png">
+  <title>Mobile Deck</title>
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="main-content-outer">
+
+      <div class="player-container">
+        <img id="album-thumbnail" class="album-thumbnail" src="./img/NoImage.png" alt="Album Thumbnail">
+
+        <div class="track-info">
+          <h2 id="title">　</h2>
+          <h3 id="artist">　</h3>
+        </div>
+
+        <div class="controls">
+          <button id="prev-button">
+            <img src="./img/skip_previous.svg" style=" width: 100%;">
+          </button>
+          <button id="play-pause-button">
+            <img src="./img/play_pause.svg" style=" width: 100%;">
+          </button>
+          <button id="next-button">
+            <img src="./img/skip_next.svg" style=" width: 100%;">
+          </button>
+        </div>
+
+      </div>
+      <div class="system-info">
+        <h1 style="margin-top: 0;">System Information</h1>
+
+        <div class="progress-container">
+          <div class="progress-label">CPU Usage: <span id="cpu-usage">0.0</span>% (<span id="cpu-name"></span> <span
+              id="cpu-cores"></span>)</div>
+          <div class="progress-bar">
+            <div class="cpu" id="cpu-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-label">Memory Usage: <span id="memory-usage">70.6</span>% (<span
+              id="memory-capacity"></span>, <span id="memory-speed"></span>)</div>
+          <div class="progress-bar">
+            <div class="memory" id="memory-bar" style="width: 70.6%;"></div>
+          </div>
+        </div>
+
+        <div class="progress-container">
+          <div class="progress-label">Disk Usage: <span id="disk-usage">59.9</span>%</div>
+          <div class="progress-bar">
+            <div class="disk" id="disk-bar" style="width: 59.9%;"></div>
+          </div>
+        </div>
+        <div id="network_usage" style="display: none;">
+          <h2>Network Usage</h2>
+          <table>
+            <tr>
+              <th>Bytes Sent</th>
+              <th>Bytes Received</th>
+            </tr>
+            <tr>
+              <td id="bytes-sent">502,951,567</td>
+              <td id="bytes-recv">4,258,810,672</td>
+            </tr>
+          </table>
+        </div>
+
+      </div>
+    </div>
+    <div class="sidebar" id="sidebar">
+      <!-- <h1 style="text-align: center;">Clipboard</h1> -->
+    </div>
+  </div>
+
+</body>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script> -->
+<script>
+  const clipboard_num = 6;
+
+  function updateComputerInfo(systemInfo) {
+    // JSONデータをHTML要素に反映
+    // 四捨五入して小数点第1位まで表示
+    let cpuUsage = Math.round(systemInfo.data.cpu_usage * 10) / 10;
+    document.getElementById('cpu-usage').textContent = cpuUsage;
+    document.getElementById('cpu-bar').style.width = systemInfo.data.cpu_usage + '%';
+
+    document.getElementById('memory-usage').textContent = systemInfo.data.memory_usage;
+    document.getElementById('memory-bar').style.width = systemInfo.data.memory_usage + '%';
+
+    document.getElementById('disk-usage').textContent = systemInfo.data.disk_usage;
+    document.getElementById('disk-bar').style.width = systemInfo.data.disk_usage + '%';
+
+    document.getElementById('bytes-sent').textContent = systemInfo.data.network_usage.bytes_sent.toLocaleString();
+    document.getElementById('bytes-recv').textContent = systemInfo.data.network_usage.bytes_recv.toLocaleString();
+
+    document.getElementById('cpu-name').textContent = systemInfo.info.cpu_name.trim();
+    document.getElementById('cpu-cores').textContent = systemInfo.info.cpu_cores + 'C' + systemInfo.info.cpu_threads + 'T';
+    // document.getElementById('cpu-threads').textContent = systemInfo.info.cpu_threads;
+
+    // 四捨五入して小数点第2位まで表示
+    let memoryCapacity = Math.round(systemInfo.info.memory_info.TotalCapacity * (systemInfo.data.memory_usage / 100) * 100) / 100;
+    document.getElementById('memory-capacity').textContent = `${memoryCapacity}GB/${systemInfo.info.memory_info.TotalCapacity}.00GB`;
+    // document.getElementById('memory-modules').textContent = systemInfo.info.memory_info.NumModules;
+    document.getElementById('memory-speed').textContent = systemInfo.info.memory_info.MinSpeed + 'MHz';
+  }
+
+  function updateAudioInfo(audioInfo) {
+    // JSONデータをHTML要素に反映
+    if (audioInfo.data == null) {
+      document.getElementById('artist').textContent = "　";
+      document.getElementById('title').textContent = "　";
+      document.getElementById('album-thumbnail').src = "./img/NoImage.png";
+      return;
+    } else {
+      document.getElementById('artist').textContent = audioInfo.data.artist;
+      document.getElementById('title').textContent = audioInfo.data.title;
+      if (audioInfo.data.album_thumbnail) {
+        document.getElementById('album-thumbnail').src = "data:image/webp;base64," + audioInfo.data.album_thumbnail;
+      } else {
+        document.getElementById('album-thumbnail').src = "./img/NoImage.png";
+      }
+    }
+
+
+  }
+
+
+
+  function updateClipboardInfo(clipboardInfo) {
+    // JSONデータをHTML要素に反映
+    for (const key of Object.keys(clipboardInfo.data)) {
+      if (key == "type") {
+        continue;
+      }
+      const i = key.match(/clipboard_(\d+)/)[1];
+      if (parseInt(i) >= clipboard_num) {
+        continue;
+      }
+      console.log(key);
+      let item = clipboardInfo.data[key];
+      if (item) {
+        if (item.type === 'text') {
+          document.getElementById(`icon_${i}`).src = `./img/${item.type}.svg`;
+          document.getElementById(`item_${i}`).value = item.label;
+          document.getElementById(`download_${i}`).disabled = false;
+        } else if (item.type === 'image') {
+          if (item.label !== '' && item.label !== null) {
+            document.getElementById(`icon_${i}`).src = item.label;
+          } else {
+            document.getElementById(`icon_${i}`).src = `./img/${item.type}.svg`;
+          }
+          document.getElementById(`item_${i}`).value = "Image";
+          document.getElementById(`download_${i}`).disabled = true;
+        }
+        else if (item.type === 'file') {
+          document.getElementById(`icon_${i}`).src = `./img/${item.type}.svg`;
+          document.getElementById(`item_${i}`).value = item.label;
+          document.getElementById(`download_${i}`).disabled = true;
+        }
+
+      } else {
+        document.getElementById(`icon_${i}`).src = `./img/text.svg`;
+        document.getElementById(`item_${i}`).value = '';
+      }
+    }
+  }
+  function isBase64Image(text) {
+    // Base64の形式にマッチする正規表現 (avifも追加)
+    const base64Pattern = /^data:image\/(png|jpeg|jpg|gif|bmp|webp|avif);base64,/;
+
+    // テキストがこの正規表現にマッチするかを確認
+    return base64Pattern.test(text);
+  }
+  function base64ToBinary(base64String) {
+    // Base64エンコードされた文字列をデコードしてバイナリ文字列を取得
+    const binaryString = atob(base64String);
+
+    // バイナリ文字列の長さを取得
+    const len = binaryString.length;
+
+    // バイナリデータを格納するUint8Arrayを作成
+    const bytes = new Uint8Array(len);
+
+    // バイナリ文字列をUint8Arrayに変換
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    return bytes;
+  }
+
+  const copyTextToClipboard = (str) => {
+    if (!str || typeof str !== 'string') {
+      return '';
+    }
+    const textarea = document.createElement('textarea');
+    textarea.id = 'tmp_copy';
+    textarea.style.position = 'fixed';
+    textarea.style.right = '100vw';
+    textarea.style.fontSize = '16px';
+    textarea.setAttribute('readonly', 'readonly');
+    textarea.textContent = str;
+    document.body.appendChild(textarea);
+    const elm = document.getElementById('tmp_copy');
+    elm.select();
+    const range = document.createRange();
+    range.selectNodeContents(elm);
+    const sel = window.getSelection();
+    if (sel) {
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+    elm.setSelectionRange(0, 999999);
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+
+    return str;
+  };
+
+  class KeyManager {
+    constructor(passphrase) {
+      this.passphrase = passphrase;
+      this.key = this._generateKey();
+    }
+
+    // UUID v4から共通鍵を生成
+    _generateKey() {
+      const salt = CryptoJS.lib.WordArray.random(128 / 8);  // 適切なsaltを生成
+      const key = CryptoJS.PBKDF2(this.passphrase, salt, {
+        keySize: 256 / 32,
+        iterations: 100000,
+        hasher: CryptoJS.algo.SHA256
+      });
+      return key;
+    }
+
+    // データを暗号化する
+    encrypt(data) {
+      const iv = CryptoJS.lib.WordArray.random(128 / 8); // 16バイトのIVを生成
+      const encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(data), this.key, {
+        iv: iv,
+        mode: CryptoJS.mode.CFB,
+        padding: CryptoJS.pad.NoPadding
+      });
+      const ivHex = iv.toString(CryptoJS.enc.Hex);
+      const encryptedBase64 = encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+      return ivHex + encryptedBase64;
+    }
+
+    // 暗号化されたデータを復号化する
+    decrypt(encryptedData) {
+      const ivHex = encryptedData.slice(0, 32);  // IVは最初の16バイト（32文字のHex）
+      const encryptedBase64 = encryptedData.slice(32);  // IV以降が暗号化されたデータ
+      const iv = CryptoJS.enc.Hex.parse(ivHex);
+      const encrypted = CryptoJS.enc.Base64.parse(encryptedBase64);
+      const decrypted = CryptoJS.AES.decrypt({ ciphertext: encrypted }, this.key, {
+        iv: iv,
+        mode: CryptoJS.mode.CFB,
+        padding: CryptoJS.pad.NoPadding
+      });
+      return decrypted.toString(CryptoJS.enc.Utf8);
+    }
+  }
+
+  let key_manager = null;
+  let clipboard_data = null;
+  class WebSocketClient {
+    constructor(url) {
+      this.url = url;
+      this.websocket = null;
+    }
+
+    async connect() {
+      return new Promise((resolve, reject) => {
+        this.websocket = new WebSocket(this.url);
+
+        this.websocket.onopen = () => {
+          console.log('WebSocket connection opened.');
+          this.onOpen();
+          resolve(); // 接続成功時に解決
+        };
+
+        this.websocket.onmessage = (event) => {
+          // console.log('Message received:', event.data);
+          if (key_manager !== null) {
+            this.onMessage(key_manager.decrypt(event.data));
+          } else {
+            this.onMessage(JSON.parse(event.data));
+          }
+        };
+
+        this.websocket.onclose = () => {
+          console.log('WebSocket connection closed.');
+          this.onClose();
+        };
+
+        this.websocket.onerror = (error) => {
+          console.error('WebSocket error:', error);
+          this.onError(error);
+          reject(error); // エラー発生時に拒否
+        };
+      });
+    }
+
+    async sendMessage(message) {
+      if (key_manager !== null) {
+        message = key_manager.encrypt(message);
+      }
+      if (this.websocket && this.websocket.readyState === WebSocket.OPEN) {
+        this.websocket.send(message);
+      } else {
+        console.error('WebSocket is not open. Unable to send message.');
+      }
+    }
+
+    async close() {
+      if (this.websocket) {
+        this.websocket.close();
+      }
+    }
+
+    onOpen() {
+      // Override this method to handle open event
+    }
+
+    onMessage(message) {
+
+      // Override this method to handle received message
+      if (message.type === 'system_info') {
+        console.log('System information received:', message);
+        updateComputerInfo(message);
+      } else if (message.type === 'audio_info') {
+        console.log('Audio information received:', message);
+        updateAudioInfo(message);
+      } else if (message.type === 'clipboard_info') {
+        console.log('Clipboard information received:', message);
+        clipboard_data = message;
+        updateClipboardInfo(message);
+      } else if (message.type === 'clipboard_download') {
+        console.log('Clipboard download:', message);
+        copyTextToClipboard(message.data);
+      }
+    }
+
+    onClose() {
+      client.connect();
+    }
+
+    onError(error) {
+      // Override this method to handle error event
+    }
+  }
+  let client = null;
+  // 開始時に実行
+  window.onload = async function () {
+    // key_manager = new KeyManager(location.hash.slice(1));
+    // 現在のURLからWebSocketクライアントのインスタンスを生成
+    let ws_url = `ws://${new URL(location.href).host}/ws`
+    client = new WebSocketClient(ws_url);
+    await client.connect();
+    await client.sendMessage(JSON.stringify({ type: 'message', data: 'Hello, WebSocket!' }));
+    document.getElementById('play-pause-button').addEventListener('click', () => {
+      // 再生・一時停止ボタンがクリックされたときの処理をここに追加
+      client.sendMessage(JSON.stringify({ type: 'input', command: 'play_pause' }));
+    });
+
+    document.getElementById('prev-button').addEventListener('click', () => {
+      // 前の曲にスキップする処理をここに追加
+      client.sendMessage(JSON.stringify({ type: 'input', command: 'prev_track' }));
+
+    });
+
+    document.getElementById('next-button').addEventListener('click', () => {
+      // 次の曲にスキップする処理をここに追加
+      client.sendMessage(JSON.stringify({ type: 'input', command: 'next_track' }));
+    });
+
+    // クリップボードの要素を動的にsidebarに追加
+    let sidebar = document.getElementById('sidebar');
+    for (let i = 0; i < clipboard_num; i++) {
+      let html = `
+      <div class="sidebar-item">
+        <div class="image-container">
+            <img id="icon_${i}" src="./img/text.svg" alt="Image">
+        </div>
+        
+        <div class="text-box">
+          <textarea class="text-area" id="item_${i}" style="text-align:left;width:100%;height:20px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;min-height:50px;line-height:50px;"></textarea>
+          <!--<span id="item_${i}" style="text-align:center;width:100%;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;min-height:50px;line-height:50px;"></span>-->
+          <div class="button-area">
+            <button id="upload_${i}" class="inner-button"><img src="./img/upload.svg" alt=""></button>
+            <input type="file" id="fileInput_${i}" accept="image/*" style="display: none;">
+            <button id="download_${i}" class="inner-button"><img src="./img/download.svg" alt=""></button>
+            <button id="paste_${i}" class="inner-button"><img src="./img/paste.svg" alt=""></button>
+            <button id="copy_${i}" class="inner-button"><img src="./img/copy.svg" alt=""></button>
+          </div>
+        </div>
+      </div>
+      `;
+      // sidebarの最後の要素の後ろに追加
+      sidebar.insertAdjacentHTML('beforeend', html);
+    }
+    for (let i = 0; i < clipboard_num; i++) {
+      document.getElementById(`upload_${i}`).addEventListener('click', () => {
+        document.getElementById(`fileInput_${i}`).click();
+      });
+      document.getElementById(`fileInput_${i}`).addEventListener("change", function () {
+        const file = document.getElementById(`fileInput_${i}`).files[0];
+        if (file && file.type.startsWith("image/")) {
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+            // ここで画像をプレビュー表示などの処理を行う
+            console.log("画像のデータURL:", e.target.result);
+            // 画像をJSON形式でまとめる
+            const result = {
+              type: 'image',
+              content: e.target.result
+            };
+
+            client.sendMessage(JSON.stringify({
+              type: 'clipboard_upload',
+              id: i,
+              data: result
+            }));
+          };
+
+          reader.readAsDataURL(file);
+        } else {
+          console.log("画像ファイルを選択してください。");
+          document.getElementById(`fileInput_${i}`).value = ""; // 入力をクリア
+        }
+      });
+      document.getElementById(`paste_${i}`).addEventListener('click', () => {
+        client.sendMessage(JSON.stringify({ type: 'clipboard_paste', id: i }));
+      });
+      document.getElementById(`copy_${i}`).addEventListener('click', () => {
+        client.sendMessage(JSON.stringify({ type: 'clipboard_copy', id: i }));
+      });
+      document.getElementById(`download_${i}`).addEventListener('click', () => {
+        copyTextToClipboard(clipboard_data["data"]["clipboard_" + i].data);
+      });
+      document.getElementById(`item_${i}`).addEventListener('paste', function (event) {
+        const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+        let result = { type: null, content: null };
+        let before = document.getElementById(`item_${i}`).value
+        for (let j = 0; j < items.length; j++) {
+          if (items[j].type === 'text/plain') {
+            items[j].getAsString(function (text) {
+              // テキストがBase64形式の画像データかどうかを判定
+              if (isBase64Image(text)) {
+                // 画像をJSON形式でまとめる
+                result = {
+                  type: 'image',
+                  content: text
+                };
+                client.sendMessage(JSON.stringify({
+                  type: 'clipboard_upload', id: i,
+                  data: result
+                }));
+                console.log('クリップボードから画像を取得:', result);
+              } else {
+                // テキストをJSON形式でまとめる
+                result = {
+                  type: 'text',
+                  content: text
+                };
+                client.sendMessage(JSON.stringify({
+                  type: 'clipboard_upload', id: i,
+                  data: result
+                }));
+                console.log('クリップボードからテキストを取得:', result);
+              }
+              // 0.2秒後に元のテキストに戻す
+              setTimeout(function () {
+                document.getElementById(`item_${i}`).value = before;
+              }, 0);
+            });
+          } else if (items[j].type.indexOf('image') !== -1) {
+            console.log(items[j]);
+            if (items[j].kind === "file") {
+              // ファイルとして画像を取得
+              const blob = items[j].getAsFile();
+              const reader = new FileReader();
+              console.log("処理中のファイルアイテム:", items[j]);
+
+              reader.onload = function (event) {
+                const base64Data = event.target.result; // data:image/...;base64,...
+
+                // 画像をJSON形式でまとめる
+                const result = {
+                  type: 'image',
+                  content: base64Data // Base64エンコードされた画像データ
+                };
+
+                client.sendMessage(JSON.stringify({
+                  type: 'clipboard_upload',
+                  id: i,
+                  data: result
+                }));
+                console.log('クリップボードから画像を取得 (file):', result);
+              };
+
+              reader.readAsDataURL(blob); // DataURL形式で読み込む
+            } else if (items[j].kind === "string") {
+              continue;
+              // 文字列として画像を取得
+              items[j].getAsString(function (stringContent) {
+                // 文字列をバイナリデータに変換
+                try {
+                  // バイナリ文字列をUint8Arrayに変換
+                  const binaryString = atob(stringContent);
+                  const len = binaryString.length;
+                  const bytes = new Uint8Array(len);
+                  for (let k = 0; k < len; k++) {
+                    bytes[k] = binaryString.charCodeAt(k);
+                  }
+
+                  // Uint8ArrayをBase64に再エンコード
+                  const base64String = btoa(String.fromCharCode.apply(null, bytes));
+                  const base64Data = `data:${items[j].type};base64,${base64String}`;
+
+                  // 画像をJSON形式でまとめる
+                  const result = {
+                    type: 'image',
+                    content: base64Data
+                  };
+
+                  client.sendMessage(JSON.stringify({
+                    type: 'clipboard_upload',
+                    id: i,
+                    data: result
+                  }));
+                  console.log('クリップボードから画像を取得 (string):', result);
+                } catch (error) {
+                  console.error('文字列として取得した画像データの処理中にエラーが発生しました:', error);
+                }
+              });
+            }
+          }
+        }
+
+        if (!items.length) {
+          console.log('クリップボードにテキストや画像は含まれていませんでした。');
+        }
+
+      });
+    }
+
+  }
+
+</script>
+
+</html>

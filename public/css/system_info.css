@@ -1,0 +1,65 @@
+.system-info {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: white;
+    height: 100%;
+}
+
+.system-info h1, h2 {
+    text-align: center;
+}
+.progress-container {
+    margin-bottom: 20px;
+}
+.progress-label {
+    margin-bottom: 5px;
+}
+.progress-bar {
+    width: 100%;
+    background-color: #f3f3f3;
+    border-radius: 25px;
+    overflow: hidden;
+}
+.progress-bar div {
+    height: 25px;
+    border-radius: 25px;
+    text-align: center;
+    color: white;
+    line-height: 25px;
+    transition: width 1s ease; /* 0.5秒のアニメーションを追加 */
+}
+.progress-bar .cpu {
+    background-color: #4caf50;
+}
+.progress-bar .memory {
+    background-color: #2196f3;
+}
+.progress-bar .disk {
+    background-color: #ff9800;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+th {
+    background-color: #383838;
+}
+.info-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+.info-table th, .info-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+.info-table th {
+    background-color: #f2f2f2;
+}
